@@ -5,8 +5,6 @@ import json
 
 storage_path = os.path.join(tempfile.gettempdir(), 'storage.data')
 
-is_storage_exist = False
-
 
 def init_storage():
     with open(storage_path, 'w') as f:
@@ -47,7 +45,7 @@ def main():
 
     if args.key is not None:
         if args.value is not None:
-            write(str(args.key), str(args.value))
+            write(args.key, args.value)
         else:
             print(read(args.key))
     else:
