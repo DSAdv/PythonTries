@@ -2,11 +2,18 @@ import argparse
 
 
 def string_sum(string):
+    """Return sum of digits in string"""
     digits = [int(char) for char in string if char.isdigit()]
     return sum(digits)
 
 
 def ladder(string):
+    """
+    Return ladder that looks like:
+                  #
+                 ##
+                ###
+    """
     n_steps = int(string) if string.isdigit() else 1
     result = ''
     for i in range(1, n_steps+1):
