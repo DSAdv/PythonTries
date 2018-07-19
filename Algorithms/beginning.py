@@ -1,16 +1,52 @@
 class GCD:
-
+    """ This class will calculate
+    GCD of given two numbers.
+    If the input is negative, both the
+    numbers are converted to positive
+    before the calculation
+    """
     def __init__(self, method='euclid'):
-        self.method = method
+        self.method = {
+            'euclid': self._euclid,
+            'stain': self._stain
+        }
+        self.method_type = method
 
-    def get(self, num1, num2):
-        return self.__dict__[f'_{self.method}'](num1, num2)
+    def get(self, a, b):
+        try:
+            return self.method[self.method_type](a, b)
+        except KeyError:
+            return None
 
-    def _euclid(self, num1, num2):
+    def _euclid(self, a, b):
         pass
 
-    def _stain(self, num1, num2):
-        pass
+    def _stain(self, a, b):
+        if a == b:
+            return a
+        elif a == 0:
+            return b
+        elif b == 0:
+            return a
+        # u is even
+        elif a & 1 == 0:
+            # v is even
+            if b & 1 == 0:
+                return 2 * self._stain(a >> 1, b >> 1)
+            # v is odd
+            else:
+                return self._stain(a >> 1, b)
+        # u is odd
+        elif a & 1 != 0:
+            # v is even
+            if b & 1 == 0:
+                return self._stain(a, b >> 1)
+            # v is odd and u is greater than v
+            elif a > b and b & 1 != 0:
+                return self._stain((a - b) >> 1, b)
+            # v is odd and u is smaller than v
+            else:
+                return self._stain((b - a) >> 1, a)
 
 
 class Fraction:
@@ -32,3 +68,5 @@ if __name__ == '__main__':
     fr1 = Fraction(3, 5)
     fr2 = Fraction(1, 5)
     print(fr1 + fr2)
+    gcd = GCD('stain')
+    print(gcd.get(40,15))
