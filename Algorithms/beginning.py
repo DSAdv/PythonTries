@@ -1,3 +1,6 @@
+import math
+
+
 class GCD:
     """ This class will calculate
     GCD of given two numbers.
@@ -14,14 +17,28 @@ class GCD:
 
     def get(self, a, b):
         try:
+            a, b = abs(a), abs(b)
             return self.method[self.method_type](a, b)
         except KeyError:
             return None
 
     def _euclid(self, a, b):
-        pass
+        """
+        Euclid GCD algorithm implementation.
+        """
+        while a % b != 0:
+            old_a = a
+            old_b = b
+
+            a = old_b
+            b = old_a % old_b
+        return b
 
     def _stain(self, a, b):
+        """
+        Stain's GCD algorithm implementation.
+        Recursive and faster that Euclid's implementation.
+        """
         if a == b:
             return a
         elif a == 0:
@@ -68,5 +85,5 @@ if __name__ == '__main__':
     fr1 = Fraction(3, 5)
     fr2 = Fraction(1, 5)
     print(fr1 + fr2)
-    gcd = GCD('stain')
+    gcd = GCD('euclid')
     print(gcd.get(40,15))
