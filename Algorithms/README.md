@@ -1,5 +1,6 @@
 # Algorithms
 
 ## Fraction
-    - GCD: **Done**
-    - Base arithmetic operations: *Process*
++ GCD: **Done**
++ Base arithmetic operations: **Process**
++ Output: **Process**
