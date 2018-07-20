@@ -89,17 +89,62 @@ class Fraction:
             self.numerator //= common
             self.denominator //= common
 
+    def _execute_operation(self, other, operation=''):
+
+        operations = {
+            '+': lambda a, b: a + b,
+            '-': lambda a, b: a - b,
+            '*': lambda a, b: a * b
+        }
+
+        fst_num = self.numerator
+        snd_num = other.numerator
+        new_denominator = self.denominator * other.denominator
+
+        if operation in ['+', '-']:
+            fst_num = self.numerator * other.denominator
+            snd_num = other.numerator * self.denominator
+        elif operation == '/':
+            snd_num = other.denominator
+            new_denominator = self.denominator * other.numerator
+            operation = '*'
+
+        if self.is_negative():
+            fst_num = -fst_num
+        if other.is_negative():
+            snd_num = -snd_num
+
+        new_numerator = operations[operation](fst_num, snd_num)
+
+        instance = Fraction(new_numerator, new_denominator)
+        instance.reduce()
+        return instance
+
     def __neg__(self):
         self.negative = False if self.is_negative() else True
         return self
 
     def __add__(self, other):
-        new_numerator = self.numerator * other.denominator + other.numerator * self.denominator
-        new_denominator = self.denominator * other.denominator
+        return self._execute_operation(other, operation='+')
 
-        instance = Fraction(new_numerator, new_denominator)
-        instance.reduce()
-        return instance
+    def __sub__(self, other):
+        return self._execute_operation(other, operation='-')
+
+    def __mul__(self, other):
+        return self._execute_operation(other, operation='*')
+
+    def __truediv__(self, other):
+        return self._execute_operation(other, operation='/')
+
+    def __eq__(self, other):
+        fst_numerator = self.numerator * other.denominator
+        snd_numerator = other.numerator * self.denominator
+        return fst_numerator == snd_numerator and self.is_negative() == other.is_negative()
+
+    def __ne__(self, other):
+        fst_numerator = self.numerator * other.denominator
+        snd_numerator = other.numerator * self.denominator
+        return fst_numerator != snd_numerator
 
     def __str__(self):
         num, den = abs(self.numerator), abs(self.denominator)
@@ -107,8 +152,11 @@ class Fraction:
 
 
 if __name__ == '__main__':
-    fr1 = Fraction(4, 8)
+    fr1 = Fraction(4, 5)
     fr2 = Fraction(1, 4)
-    print(fr1+fr2)
-    gcd = GCD('euclid')
+    fr3 = Fraction(2, 8)
+    print(fr1/fr2)
+    print(fr2 != fr1)
+    print(fr2 == fr3)
+    gcd = GCD('stain')
     print(gcd.get(40,15))
