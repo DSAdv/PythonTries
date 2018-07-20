@@ -68,22 +68,47 @@ class GCD:
 
 class Fraction:
 
-    def __init__(self, numerator, denominator):
-        self.numerator = numerator
-        self.denominator = denominator
+    def __init__(self, numerator, denominator, method='euclid'):
+        self.negative = False
+        self.gcd = GCD(method)
+
+        self.numerator = abs(numerator)
+        self.denominator = abs(denominator)
+        self.reduce()
+        if numerator < 0 and denominator < 0:
+            pass
+        elif numerator < 0 or denominator < 0:
+            self.negative = True
+
+    def is_negative(self):
+        return True if self.negative else False
+
+    def reduce(self):
+        common = self.gcd.get(self.numerator, self.denominator)
+        if common > 1:
+            self.numerator //= common
+            self.denominator //= common
+
+    def __neg__(self):
+        self.negative = False if self.is_negative() else True
+        return self
 
     def __add__(self, other):
         new_numerator = self.numerator * other.denominator + other.numerator * self.denominator
         new_denominator = self.denominator * other.denominator
-        return Fraction(new_numerator, new_denominator)
+
+        instance = Fraction(new_numerator, new_denominator)
+        instance.reduce()
+        return instance
 
     def __str__(self):
-        return f'{self.numerator}/{self.denominator}'
+        num, den = abs(self.numerator), abs(self.denominator)
+        return f'-{num}/{den}' if self.is_negative() else f'{num}/{den}'
 
 
 if __name__ == '__main__':
-    fr1 = Fraction(3, 5)
-    fr2 = Fraction(1, 5)
-    print(fr1 + fr2)
+    fr1 = Fraction(4, 8)
+    fr2 = Fraction(1, 4)
+    print(fr1+fr2)
     gcd = GCD('euclid')
     print(gcd.get(40,15))
